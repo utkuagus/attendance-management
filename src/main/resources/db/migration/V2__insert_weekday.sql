@@ -1,0 +1,1 @@
+insert into weekday (name) values ('MON'),('TUE'),('WED'),('THU'),('FRI');
