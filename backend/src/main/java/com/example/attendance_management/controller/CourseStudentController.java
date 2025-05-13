@@ -14,7 +14,7 @@ public class CourseStudentController {
     private CourseStudentService courseStudentService;
 
     @PostMapping
-    public CourseStudentDTO addCourseStudent(@RequestBody CourseStudentDTO courseStudentDTO) {
+    public CourseStudentDTO addCourseStudent(@RequestBody CourseStudentDTO courseStudentDTO) throws Exception {
         return courseStudentService.addCourseStudent(courseStudentDTO);
     }
 

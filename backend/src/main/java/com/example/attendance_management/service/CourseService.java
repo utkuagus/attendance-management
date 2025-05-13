@@ -57,11 +57,15 @@ public class CourseService {
         course.setWeekDay(weekdayService.getById(course.getWeekDay().getId()));
     }
 
-    private Course getById(Long id) throws Exception {
+    public Course getById(Long id) throws Exception {
         Optional<Course> optionalCourse = courseRepository.findById(id);
         if(optionalCourse.isEmpty()) {
             throw new Exception("No course found for given id");
         }
         return optionalCourse.get();
+    }
+
+    public List<Course> getByIdList(List<Long> idList) {
+        return courseRepository.findByIdIn(idList);
     }
 }

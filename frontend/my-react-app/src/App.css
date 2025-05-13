@@ -1,0 +1,160 @@
+#root {
+  max-width: 1280px;
+  text-align: center;
+}
+
+* {
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+.grid-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.header-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-row {
+  display: flex;
+}
+
+.header-cell {
+  font-weight: bold;
+  padding: 10px;
+  background-color: #f0f0f0;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-row {
+  display: flex;
+}
+
+.grid-cell {
+  padding: 20px;
+  text-align: center;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  min-width: 100px; /* Ensure cells have some width */
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  border-collapse: collapse;
+  position: relative;
+  top: -70px;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-row.full-width {
+  width: 100vw;
+}
+
+.flex-row.space-around {
+  justify-content: space-around;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-item {
+  height: 80px;
+  width: 140px;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  user-select: none;
+}
+
+.courseItem {
+    display: flex;
+}
+
+.courseItem > * {
+  height: 50px;
+}
+
+.courseOption {
+  width: 70px;
+}
+
+.courseTime {
+  width: 160px;
+}
+
+
+.flex-item:nth-child(2) {
+  border-left-width: 2px;
+}
+
+.flex-row:nth-child(2) > .flex-item {
+  border-top-width: 2px;
+}
+
+.flex-row:first-child > .flex-item, .flex-item:first-child {
+  border: 0;
+}
+
+.flex-item.clicked {
+  background-color: red;
+}
