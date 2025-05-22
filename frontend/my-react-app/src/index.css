@@ -66,24 +66,3 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
-
-.flex-row {
-  display: flex;
-  flex-direction: row;
-}
-
-.flex-row.space-around {
-  justify-content: space-between;
-}
-
-.flex-column {
-  display: flex;
-  flex-direction: column;
-}
-
-
-.courseItem > * {
-  height: 80px;
-  width: 140px;
-  border: 3px solid;
-}

@@ -1,10 +1,11 @@
 #root {
-  max-width: 1280px;
+  flex: 1;
   text-align: center;
 }
 
 * {
   text-align: center;
+  user-select: none;
 }
 
 .logo {
@@ -54,7 +55,6 @@ ul {
 .grid-container {
   display: flex;
   flex-direction: row;
-  gap: 10px;
 }
 
 .header-column {
@@ -91,12 +91,11 @@ ul {
   min-width: 100px; /* Ensure cells have some width */
 }
 
-.flex-container {
+.schedule-table {
   display: flex;
   flex-direction: column;
   border-collapse: collapse;
   position: relative;
-  top: -70px;
 }
 
 .flex-row {
@@ -118,7 +117,12 @@ ul {
   justify-content: center;
 }
 
-.flex-item {
+.login-container {
+  width: 100%;
+  height: 100vh;
+}
+
+.table-item {
   height: 80px;
   width: 140px;
   border-style: solid;
@@ -126,15 +130,23 @@ ul {
   user-select: none;
 }
 
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 .courseItem {
     display: flex;
+      position: relative;
 }
 
 .courseItem > * {
   height: 50px;
+  padding: 0 15px;
+  border: 3px solid;
 }
 
-.courseOption {
+.courseCode {
   width: 70px;
 }
 
@@ -142,19 +154,38 @@ ul {
   width: 160px;
 }
 
+.courseDay {
+  flex: 1;
+}
 
-.flex-item:nth-child(2) {
+.courseItem .error {
+  border: 0;
+  text-wrap: no-wrap;
+  color: rgb(255, 65, 65);
+  position: absolute;
+  right: 0;
+  transform: translateX(100%);
+}
+
+
+.table-item:nth-child(2) {
   border-left-width: 2px;
 }
 
-.flex-row:nth-child(2) > .flex-item {
+.flex-row:nth-child(2) > .table-item {
   border-top-width: 2px;
 }
 
-.flex-row:first-child > .flex-item, .flex-item:first-child {
+.flex-row:first-child > .table-item, .table-item:first-child {
   border: 0;
 }
 
-.flex-item.clicked {
-  background-color: red;
+h2 {
+  text-transform: uppercase;
+}
+
+body {
+  display: block;
+  justify-content: center;
+  align-items: center;
 }

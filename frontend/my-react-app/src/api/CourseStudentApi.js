@@ -12,7 +12,7 @@ export const getAllCourseStudent = async () => {
   }
 };
 
-export const addCourseStudent = async (courseStudent) => {
+export const insertCourseStudent = async (courseStudent) => {
     try {
         const response = await axios.post(URL, courseStudent)
         console.log("success: " + response)
@@ -20,6 +20,7 @@ export const addCourseStudent = async (courseStudent) => {
     } catch (error) {
               if (error.response) {
             console.error("Backend error:", error.response.data.error);
+            throw error.response.data.error;
         } else if (error.request) {
             console.error("No response received:", error.request);
         } else {
