@@ -1,17 +1,23 @@
 import { useEffect, useState } from "react";
 import { getAllCourse } from "../api/CourseApi";
-import { insertCourseStudent } from "../api/CourseStudentApi";
+import {
+  insertCourseStudent,
+  deleteCourseStudent,
+} from "../api/CourseStudentApi";
 import { getDayList } from "../utils/DayList.JSX";
 
 function CourseOptions(props) {
   const [courseList, setCourseList] = useState([]);
+  const [studentCourseList, setStudentCourseList] = useState([]);
   const DAY_LIST = getDayList();
   const person = props.personId;
 
   const title = props.isStudent ? "available courses" : "current courses";
 
   const getAll = (instructorId) =>
-    props.isStudent ? getAllCourse() : getCoursesByInstructorId(instructorId);
+    props.isStudent
+      ? courseStudentListToCourseList()
+      : getCoursesByInstructorId(instructorId);
 
   async function getCoursesByInstructorId(instructorId) {
     let filteredResp;
@@ -41,13 +47,14 @@ function CourseOptions(props) {
       }
     }
 
-    console.log("checking person id", person);
-    if (person) {
-      fetchCourses();
+    if (!person || !props.courseStudentByStudentId) {
+      return;
     }
-  }, [person]);
+    console.log("checking person id", person);
+    fetchCourses();
+  }, [props.courseStudentByStudentId]);
 
-  function addCourseStudent(courseStudent, idx) {
+  function handleAddCourseStudent(courseStudent, idx) {
     if (!props.isStudent) {
       return;
     }
@@ -60,15 +67,51 @@ function CourseOptions(props) {
       });
   }
 
+  async function handleDeleteCourseStudent(courseId, idx) {
+    if (!props.isStudent) {
+      return;
+    }
+    const courseStudent = props.courseStudentByStudentId.find(
+      (cs) => cs.courseId == courseId
+    );
+    console.log("coursestudentbyid", props.courseStudentByStudentId);
+    console.log("courseId", courseId);
+    deleteCourseStudent(courseStudent.id)
+      .then((_) => props.setCourseStudentTrigger((cst) => !cst))
+      .catch((e) => {
+        const errorDivs = document.querySelectorAll(".error");
+        errorDivs.forEach((div) => (div.innerText = ""));
+        errorDivs[idx].innerText = "* " + e;
+      });
+  }
+
+  async function courseStudentListToCourseList() {
+    const courseIdList = new Set(
+      props.courseStudentByStudentId.map((cs) => cs.courseId)
+    );
+    console.log("courseIdList ", courseIdList);
+    const resp = await getAllCourse();
+    console.log("resp ", resp);
+    setStudentCourseList(resp.filter((course) => courseIdList.has(course.id)));
+    return resp.filter((course) => !courseIdList.has(course.id));
+  }
+
+  function equalizeColumns() {}
+
   return (
     <div className="flex column">
-      <h2>{title}</h2>
-      <div className="flex column">
-        {courseList.map((course, idx) => (
-          <div
-            class="courseItem"
+      <h2>available courses</h2>
+      {courseList.map((course, idx) => (
+        <div class="courseItem">
+          <div className="courseCode center">{course.code}</div>
+          <div className="courseTime center">
+            {course.startTime} - {course.endTime}
+          </div>
+          <div className="courseDay center">{DAY_LIST[course.dayId]}</div>
+          <button
+            className="flex center cursor-pointer"
             onClick={() =>
-              addCourseStudent(
+              handleAddCourseStudent(
                 {
                   studentId: person,
                   courseId: courseList[idx].id,
@@ -77,15 +120,30 @@ function CourseOptions(props) {
               )
             }
           >
-            <div className="courseCode center">{course.code}</div>
-            <div className="courseTime center">
-              {course.startTime} - {course.endTime}
-            </div>
-            <div className="courseDay center">{DAY_LIST[course.dayId]}</div>
-            <div className="error center"></div>
+            Add
+          </button>
+          <div className="error center"></div>
+        </div>
+      ))}
+      <h2>current courses</h2>
+      {studentCourseList.map((course, idx) => (
+        <div class="courseItem">
+          <div className="courseCode center">{course.code}</div>
+          <div className="courseTime center">
+            {course.startTime} - {course.endTime}
           </div>
-        ))}
-      </div>
+          <div className="courseDay center">{DAY_LIST[course.dayId]}</div>
+          <button
+            className="flex center cursor-pointer"
+            onClick={() =>
+              handleDeleteCourseStudent(course.id, idx + courseList.length)
+            }
+          >
+            Delete
+          </button>
+          <div className="error center"></div>
+        </div>
+      ))}
     </div>
   );
 }

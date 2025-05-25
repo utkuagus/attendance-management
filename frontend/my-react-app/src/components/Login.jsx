@@ -25,7 +25,7 @@ export default function Login(props) {
     console.log("Password:", password);
 
     getAll().then((resp) => {
-      const user = resp.filter((student) => authUser(student.person));
+      const user = resp.filter((student) => authUser(student.person)); // TODO: make this find
       console.log("user: " + user);
       console.log(user);
       if (!user.length) {

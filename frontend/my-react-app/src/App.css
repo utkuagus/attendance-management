@@ -50,8 +50,6 @@ ul {
   padding: 0;
 }
 
-
-
 .grid-container {
   display: flex;
   flex-direction: row;
@@ -136,8 +134,8 @@ ul {
 }
 
 .courseItem {
-    display: flex;
-      position: relative;
+  display: flex;
+  position: relative;
 }
 
 .courseItem > * {
@@ -167,6 +165,14 @@ ul {
   transform: translateX(100%);
 }
 
+.courseItem > button {
+  margin: auto 12px;
+  border-color: green;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
 
 .table-item:nth-child(2) {
   border-left-width: 2px;
@@ -176,7 +182,8 @@ ul {
   border-top-width: 2px;
 }
 
-.flex-row:first-child > .table-item, .table-item:first-child {
+.flex-row:first-child > .table-item,
+.table-item:first-child {
   border: 0;
 }
 
