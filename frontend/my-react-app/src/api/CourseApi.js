@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const URL = "/api/course";
+
 export const getAllCourse = async (id) => {
   try {
-    const response = await axios.get("/api/course");
+    const response = await axios.get(URL);
     return response.data;
   } catch (error) {
     console.error("Error fetching attendance:", error);
@@ -12,7 +14,7 @@ export const getAllCourse = async (id) => {
 
 export const deleteCourse = async (id) => {
   try {
-    const response = await axios.delete("/api/course");
+    const response = await axios.delete(URL + "/" + id);
     return response.data;
   } catch (error) {
     console.error("Error deleting course:", error);

@@ -31,6 +31,6 @@ public class Course {
     @JoinColumn(name = "instructor_id", nullable = false)
     private Instructor instructor;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CourseStudent> courseStudentList;
 }

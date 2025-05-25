@@ -11,20 +11,27 @@ function App() {
   const [personId, setPersonId] = useState(false);
   const [isStudent, setIsStudent] = useState(false);
   const [isPersonTypeSelected, setIsPersonTypeSelected] = useState(false);
-  const [courseStudentByStudentId, setCourseStudentByStudentId] =
-    useState(null);
+  const [courseStudentByStudentId, setCourseStudentByStudentId] = useState(0);
 
   useEffect(() => {
     async function get() {
-      if (!personId || !isStudent) {
+      if (!personId) {
         return;
       }
+      return isStudent ? getForStudent() : getForInstructor();
+    }
+
+    async function getForStudent() {
       const courseStudentList = await getAllCourseStudent();
       const filteredList = courseStudentList.filter(
         (cs) => cs.studentId == personId
       );
       console.log("filtered list ", filteredList);
       setCourseStudentByStudentId(filteredList);
+    }
+
+    async function getForInstructor() {
+      setCourseStudentByStudentId((cs) => cs + 1);
     }
 
     get();

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllCourse } from "../api/CourseApi";
+import { getAllCourse, deleteCourse } from "../api/CourseApi";
 import {
   insertCourseStudent,
   deleteCourseStudent,
@@ -67,6 +67,21 @@ function CourseOptions(props) {
       });
   }
 
+  const handleDelete = props.isStudent
+    ? handleDeleteCourseStudent
+    : handleDeleteCourse;
+
+  async function handleDeleteCourse(courseId, idx) {
+    console.log("courseId", courseId);
+    deleteCourse(courseId)
+      .then((_) => props.setCourseStudentTrigger((cst) => !cst))
+      .catch((e) => {
+        const errorDivs = document.querySelectorAll(".error");
+        errorDivs.forEach((div) => (div.innerText = ""));
+        errorDivs[idx].innerText = "* " + e;
+      });
+  }
+
   async function handleDeleteCourseStudent(courseId, idx) {
     if (!props.isStudent) {
       return;
@@ -96,37 +111,39 @@ function CourseOptions(props) {
     return resp.filter((course) => !courseIdList.has(course.id));
   }
 
-  function equalizeColumns() {}
-
   return (
     <div className="flex column">
       <h2>available courses</h2>
-      {courseList.map((course, idx) => (
-        <div class="courseItem">
-          <div className="courseCode center">{course.code}</div>
-          <div className="courseTime center">
-            {course.startTime} - {course.endTime}
+      {!props.isStudent ? (
+        <button>Create new course</button>
+      ) : (
+        courseList.map((course, idx) => (
+          <div class="courseItem">
+            <div className="courseCode center">{course.code}</div>
+            <div className="courseTime center">
+              {course.startTime} - {course.endTime}
+            </div>
+            <div className="courseDay center">{DAY_LIST[course.dayId]}</div>
+            <button
+              className="flex center cursor-pointer"
+              onClick={() =>
+                handleAddCourseStudent(
+                  {
+                    studentId: person,
+                    courseId: courseList[idx].id,
+                  },
+                  idx
+                )
+              }
+            >
+              Add
+            </button>
+            <div className="error center"></div>
           </div>
-          <div className="courseDay center">{DAY_LIST[course.dayId]}</div>
-          <button
-            className="flex center cursor-pointer"
-            onClick={() =>
-              handleAddCourseStudent(
-                {
-                  studentId: person,
-                  courseId: courseList[idx].id,
-                },
-                idx
-              )
-            }
-          >
-            Add
-          </button>
-          <div className="error center"></div>
-        </div>
-      ))}
+        ))
+      )}
       <h2>current courses</h2>
-      {studentCourseList.map((course, idx) => (
+      {(props.isStudent ? studentCourseList : courseList).map((course, idx) => (
         <div class="courseItem">
           <div className="courseCode center">{course.code}</div>
           <div className="courseTime center">
@@ -135,9 +152,7 @@ function CourseOptions(props) {
           <div className="courseDay center">{DAY_LIST[course.dayId]}</div>
           <button
             className="flex center cursor-pointer"
-            onClick={() =>
-              handleDeleteCourseStudent(course.id, idx + courseList.length)
-            }
+            onClick={() => handleDelete(course.id, idx + courseList.length)}
           >
             Delete
           </button>
