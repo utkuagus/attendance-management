@@ -115,7 +115,9 @@ function CourseOptions(props) {
     <div className="flex column">
       <h2>available courses</h2>
       {!props.isStudent ? (
-        <button>Create new course</button>
+        <button onClick={() => props.setOpenForm(true)}>
+          Create new course
+        </button>
       ) : (
         courseList.map((course, idx) => (
           <div class="courseItem">

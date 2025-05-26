@@ -1,26 +1,26 @@
 .flex {
-    display: flex;
+  display: flex;
 }
 
 .flex.center {
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .flex.column {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .flex.gap {
-    gap: 10px;
+  gap: 10px;
 }
 
 .flex.end {
-    justify-content: end;
+  justify-content: end;
 }
 
 .flex.space-between {
-    justify-content: space-around;
+  justify-content: space-around;
 }
 
 .page-container {
@@ -29,60 +29,61 @@
 }
 
 .login-form {
-    width: 160px;
+  width: 160px;
 }
 
 .login-form > * {
-    height: 25px;
+  height: 25px;
 }
 
 .pos-relative {
-    position: relative;
+  position: relative;
 }
 
 label {
-    position: absolute;
-    transform: translateX(-100%);
-    left: -20px;
+  position: absolute;
+  transform: translateX(-100%);
+  left: -20px;
 }
 
 input[type="text"],
 input[type="password"] {
-    width: 100%;
+  width: 100%;
 }
 
-button[type="submit"] {
-    height: 45px;
+button[type="submit"],
+button[type="reset"] {
+  height: 45px;
 }
 
 .full-width {
-    width: 100%;
+  width: 100%;
 }
 
 .submit-field {
-    position: relative;
+  position: relative;
 }
 
 .submit-field > button {
-    width: 100%;
+  width: 100%;
 }
 
 .error {
-    color: red;
-    font-size: 12px;
+  color: red;
+  font-size: 12px;
 }
 
 .error.right {
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateX(12px);
-    white-space: nowrap;
-    display: inline-block;
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateX(12px);
+  white-space: nowrap;
+  display: inline-block;
 }
 
 .error.not-exist {
-    display: none;
+  display: none;
 }
 
 @media (max-width: 768px) {

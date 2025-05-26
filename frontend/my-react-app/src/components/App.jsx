@@ -5,6 +5,7 @@ import CourseOptions from "./CourseOptions";
 import Login from "./Login";
 import PersonTypeSelect from "./PersonTypeSelect";
 import { getAllCourseStudent } from "../api/CourseStudentApi";
+import CourseForm from "./CourseForm";
 
 function App() {
   const [courseStudentTrigger, setCourseStudentTrigger] = useState(false);
@@ -12,6 +13,7 @@ function App() {
   const [isStudent, setIsStudent] = useState(false);
   const [isPersonTypeSelected, setIsPersonTypeSelected] = useState(false);
   const [courseStudentByStudentId, setCourseStudentByStudentId] = useState(0);
+  const [openForm, setOpenForm] = useState(false);
 
   useEffect(() => {
     async function get() {
@@ -50,6 +52,10 @@ function App() {
     return <Login setPersonId={setPersonId} isStudent={isStudent} />;
   }
 
+  if (openForm) {
+    return <CourseForm personId={personId} />;
+  }
+
   return (
     <div className="page-container flex center space-between">
       <CourseOptions
@@ -57,6 +63,7 @@ function App() {
         personId={personId}
         isStudent={isStudent}
         courseStudentByStudentId={courseStudentByStudentId}
+        setOpenForm={setOpenForm}
       />
       <ScheduleTable
         courseStudentTrigger={courseStudentTrigger}

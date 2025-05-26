@@ -21,3 +21,13 @@ export const deleteCourse = async (id) => {
     throw error;
   }
 };
+
+export const createCourse = async (course) => {
+  try {
+    const response = await axios.post(URL, course);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating course:", error);
+    throw error;
+  }
+};
