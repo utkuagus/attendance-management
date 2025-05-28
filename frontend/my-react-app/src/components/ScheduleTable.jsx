@@ -4,11 +4,16 @@ import { getAllCourse } from "../api/CourseApi";
 import { getDayList } from "../utils/DayList.JSX";
 
 function ScheduleTable(props) {
+  const convertDigital = (num) => num.toString().padStart(2, "0") + ":00";
+
   const START_HOUR = 9,
     HOUR_COUNT = 9;
   const DAY_LIST = getDayList();
   const HOUR_LIST = [...Array(HOUR_COUNT).keys()].map(
-    (i) => digitalNum(i + START_HOUR) + " - " + digitalNum(i + START_HOUR + 1)
+    (i) =>
+      convertDigital(i + START_HOUR) +
+      " - " +
+      convertDigital(i + START_HOUR + 1)
   );
   const [courseList, setCourseList] = useState();
   const [courseData, setCourseData] = useState();
@@ -66,49 +71,141 @@ function ScheduleTable(props) {
       return;
     }
     function applyCourseToSchedule(course, idx) {
-      console.log("Apply course: " + course.dayId);
+      console.log("Apply course: ", course);
       const day = course.dayId;
       const starthour = parseInt(course.startTime.substring(0, 2)) - 9;
       const endHour = parseInt(course.endTime.substring(0, 2)) - 9;
-      console.log(starthour + " " + endHour + " " + day);
-      fillSchedule(day, starthour, endHour, idx);
+      const isStartInHalf = course.startTime.substring(3, 5) == "30";
+      const isEndInHalf = course.endTime.substring(3, 5) == "30";
+      console.log(
+        starthour,
+        " ",
+        endHour,
+        " ",
+        isStartInHalf,
+        " ",
+        isEndInHalf,
+        course
+      );
+      fillSchedule(day, starthour, endHour, isStartInHalf, isEndInHalf, idx);
+      colorSchedule();
     }
     console.log("course count " + courseData.length);
     console.log(courseData);
     courseData.forEach(applyCourseToSchedule);
   }, [courseData]);
 
-  function fillSchedule(day, starthour, endHour, idx) {
+  function colorSchedule() {}
+
+  function fillSchedule(
+    day,
+    starthour,
+    endHour,
+    isStartInHalf,
+    isEndInHalf,
+    idx
+  ) {
+    console.log(
+      "dim dim",
+      starthour,
+      " ",
+      endHour,
+      " ",
+      isStartInHalf,
+      " ",
+      isEndInHalf
+    );
+    console.log(schedule);
+    console.log(courseData);
     setSchedule((schedule) => [
       ...schedule.slice(0, starthour),
-      ...fillRow([...schedule.slice(starthour, endHour)], day, idx),
-      ...schedule.slice(endHour),
+      ...fillRow(
+        [...schedule.slice(starthour, endHour + isEndInHalf)],
+        day,
+        isStartInHalf,
+        isEndInHalf,
+        idx
+      ),
+      ...schedule.slice(endHour + isEndInHalf),
     ]);
   }
 
-  function fillRow(schedulePart, day, idx) {
-    return schedulePart.map((part) => [
+  function fillRow(schedulePart, day, isStartInHalf, isEndInHalf, idx) {
+    console.log("schedulePart", schedulePart);
+    return schedulePart.map((part, scheduleIdx) => [
       ...part.slice(0, day),
-      courseData[idx].code,
+      setHourSpace(
+        courseData[idx].code,
+        scheduleIdx == 0,
+        scheduleIdx == schedulePart.length - 1,
+        isStartInHalf,
+        isEndInHalf
+      ),
       ...part.slice(day + 1),
     ]);
   }
 
-  function digitalNum(num) {
-    return ("0" + num).substring(1) + ":00";
+  function setHourSpace(code, isStart, isEnd, isStartInHalf, isEndInHalf) {
+    if (isStart && isStartInHalf) {
+      console.log("start half entered");
+      return [null, code];
+    }
+    if (isEnd && isEndInHalf) {
+      console.log("end half entered");
+      return [code, null];
+    }
+    console.log(
+      code,
+      " ",
+      isStart,
+      " ",
+      isEnd,
+      " ",
+      isStartInHalf,
+      " ",
+      isEndInHalf
+    );
+    return code;
   }
 
+  function digitalNum(num) {
+    return num.padZeros() + ":00";
+  }
+
+  const orangeBg = { backgroundColor: "orange" };
+
+  const getStyle = (val) => (val ? orangeBg : null);
+
   function assignCells(row, col) {
-    if (row == 0) {
-      if (col == 0) {
-        return null;
-      }
+    if (row === 0) {
+      if (col === 0) return null;
       return colHeaders[col - 1];
     }
-    if (col == 0) {
+    if (col === 0) {
       return rowHeaders[row - 1];
     }
-    return schedule[row - 1][col - 1];
+
+    const cellValue = schedule[row - 1][col - 1];
+    const isActive = Boolean(cellValue);
+
+    if (Array.isArray(cellValue)) {
+      return (
+        <div className="center flex-column">
+          <div style={getStyle(cellValue[0])} className="half center">
+            {cellValue[0] ?? ""}
+          </div>
+          <div style={getStyle(cellValue[1])} className="half center">
+            {cellValue[1] ?? ""}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="center" style={getStyle(cellValue)}>
+        {cellValue}
+      </div>
+    );
   }
 
   const rowHeaders = HOUR_LIST;
@@ -123,7 +220,9 @@ function ScheduleTable(props) {
         {[...Array(rowHeaders.length + 1).keys()].map((row) => (
           <div className="flex-row">
             {[...Array(colHeaders.length + 1).keys()].map((col) => (
-              <div className="table-item center">{assignCells(row, col)}</div>
+              <div className="table-item flex-column center">
+                {assignCells(row, col)}
+              </div>
             ))}
           </div>
         ))}

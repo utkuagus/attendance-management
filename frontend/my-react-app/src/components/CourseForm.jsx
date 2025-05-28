@@ -28,12 +28,6 @@ export default function CourseForm(props) {
     setEndMinList([]);
   };
 
-  const boundedByStartHour = (hourList) =>
-    hourList.filter((hour) => hour >= startHour);
-
-  const boundedByStartTime = (minList) =>
-    minList.filter((min) => startHour != endHour || startMin <= min);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {

@@ -49,7 +49,13 @@ function App() {
   }
 
   if (!personId) {
-    return <Login setPersonId={setPersonId} isStudent={isStudent} />;
+    return (
+      <Login
+        setPersonId={setPersonId}
+        setIsPersonTypeSelected={setIsPersonTypeSelected}
+        isStudent={isStudent}
+      />
+    );
   }
 
   if (openForm) {

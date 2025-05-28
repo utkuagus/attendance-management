@@ -111,6 +111,9 @@ function CourseOptions(props) {
     return resp.filter((course) => !courseIdList.has(course.id));
   }
 
+  const getTimeWithoutSeconds = (time) =>
+    time.replace(/^(\d{1,2}:\d{2}):\d{2}(?=(\s|$))/, "$1");
+
   return (
     <div className="flex column">
       <h2>available courses</h2>
@@ -123,7 +126,8 @@ function CourseOptions(props) {
           <div class="courseItem">
             <div className="courseCode center">{course.code}</div>
             <div className="courseTime center">
-              {course.startTime} - {course.endTime}
+              {getTimeWithoutSeconds(course.startTime)} -{" "}
+              {getTimeWithoutSeconds(course.endTime)}
             </div>
             <div className="courseDay center">{DAY_LIST[course.dayId]}</div>
             <button
@@ -149,7 +153,8 @@ function CourseOptions(props) {
         <div class="courseItem">
           <div className="courseCode center">{course.code}</div>
           <div className="courseTime center">
-            {course.startTime} - {course.endTime}
+            {getTimeWithoutSeconds(course.startTime)} -{" "}
+            {getTimeWithoutSeconds(course.endTime)}
           </div>
           <div className="courseDay center">{DAY_LIST[course.dayId]}</div>
           <button

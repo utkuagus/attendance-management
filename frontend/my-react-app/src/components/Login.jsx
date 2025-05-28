@@ -75,6 +75,9 @@ export default function Login(props) {
           <a href="#">Forgot your password?</a>
         </p>
       </div>
+      <button onClick={() => props.setIsPersonTypeSelected(false)}>
+        Go back to user selection
+      </button>
     </div>
   );
 }
