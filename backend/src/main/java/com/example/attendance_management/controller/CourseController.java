@@ -14,7 +14,7 @@ public class CourseController {
     private CourseService courseService;
 
     @PostMapping
-    public CourseDTO addCourse(@RequestBody CourseDTO courseDTO) {
+    public CourseDTO addCourse(@RequestBody CourseDTO courseDTO) throws Exception {
         return courseService.addCourse(courseDTO);
     }
 

@@ -52,7 +52,8 @@ input[type="password"] {
 }
 
 button[type="submit"],
-button[type="reset"] {
+button[type="reset"],
+button.backSchedule {
   height: 45px;
 }
 
@@ -84,6 +85,12 @@ button[type="reset"] {
 
 .error.not-exist {
   display: none;
+}
+
+.top-right {
+  position: absolute;
+  right: 20px;
+  top: 20px;
 }
 
 @media (max-width: 768px) {

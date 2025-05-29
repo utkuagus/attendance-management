@@ -38,17 +38,18 @@ export default function CourseForm(props) {
       dayId: courseDay,
     };
 
-    try {
-      const response = await createCourse(data);
-      console.log("Course created:", response);
-      alert("New course is created");
-      resetForm();
-      // Do something on success, like reset form or notify user
-    } catch (error) {
-      console.error("Failed to create course:", error);
-      alert("Failed to create new course");
-      // Show user-friendly error message or UI feedback
-    }
+    createCourse(data)
+      .then((response) => {
+        console.log("Course created:", response);
+        alert("New course is created");
+        resetForm();
+        // Do something on success, like reset form or notify user
+      })
+      .catch((error) => {
+        console.error("Failed to create course:", error);
+        alert("Failed to create new course: " + error);
+        // Show user-friendly error message or UI feedback
+      });
   };
 
   useEffect(() => {
@@ -165,6 +166,12 @@ export default function CourseForm(props) {
         </button>
         <button type="reset" onClick={resetForm}>
           Reset
+        </button>
+        <button
+          class="backSchedule flex center"
+          onClick={() => props.setOpenForm(false)}
+        >
+          Back to Schedule
         </button>
       </div>
     </div>

@@ -59,7 +59,7 @@ function App() {
   }
 
   if (openForm) {
-    return <CourseForm personId={personId} />;
+    return <CourseForm personId={personId} setOpenForm={setOpenForm} />;
   }
 
   return (
@@ -76,6 +76,9 @@ function App() {
         personId={personId}
         isStudent={isStudent}
       />
+      <button class="top-right" onClick={() => setPersonId(null)}>
+        Log out
+      </button>
     </div>
   );
 }

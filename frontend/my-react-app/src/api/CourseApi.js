@@ -27,7 +27,15 @@ export const createCourse = async (course) => {
     const response = await axios.post(URL, course);
     return response.data;
   } catch (error) {
-    console.error("Error creating course:", error);
+    if (error.response) {
+      console.error("Backend error:", error.response.data.error);
+      throw error.response.data.error;
+    } else if (error.request) {
+      console.error("No response received:", error.request);
+    } else {
+      console.error("Axios error:", error.message);
+    }
+    console.error("Error fetching attendance:", error);
     throw error;
   }
 };

@@ -11,4 +11,7 @@ import java.util.List;
 public interface CourseRepository extends CrudRepository<Course, Long> {
     @Query("select c from Course c where c.id in ?1")
     List<Course> findByIdIn(Collection<Long> ids);
+
+    @Query("select c from Course c where c.instructor.id = ?1")
+    List<Course> findByInstructorId(Long id);
 }
