@@ -15,6 +15,10 @@
   gap: 10px;
 }
 
+.flex.gap-large {
+  gap: 40px;
+}
+
 .flex.end {
   justify-content: end;
 }
@@ -91,6 +95,10 @@ button.backSchedule {
   position: absolute;
   right: 20px;
   top: 20px;
+}
+
+button {
+  background-color: #1e90ff;
 }
 
 @media (max-width: 768px) {
