@@ -98,7 +98,12 @@ button.backSchedule {
 }
 
 button {
+  border: 3px solid transparent;
   background-color: #1e90ff;
+}
+
+button:hover {
+  border-color: #646cff;
 }
 
 @media (max-width: 768px) {

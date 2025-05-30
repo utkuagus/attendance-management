@@ -10,8 +10,10 @@ import com.example.attendance_management.repository.InstructorRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -21,15 +23,28 @@ public class InstructorService {
     @Autowired
     private InstructorMapper instructorMapper;
 
-    public InstructorDTO addInstructor(InstructorDTO instructorDTO) {
-        Instructor instructor = instructorMapper.instructorDTOToInstructor(instructorDTO);
-        Instructor savedInstructor = instructorRepository.save(instructor);
+    private Boolean isCredentialExists(Instructor instructor,Instructor newInstructor) {
+        return Objects.equals(instructor.getPerson().getUsername(), newInstructor.getPerson().getUsername());
+    }
+
+    public InstructorDTO addInstructor(InstructorDTO instructorDTO) throws Exception {
+        List<Instructor> instructorList = (List<Instructor>) instructorRepository.findAll();
+        Instructor newInstructor = instructorMapper.instructorDTOToInstructor(instructorDTO);
+        if(!instructorList.stream().filter(instructor -> isCredentialExists(instructor, newInstructor)).toList().isEmpty()) {
+            throw new Exception("Username already exists");
+        }
+        Instructor savedInstructor = instructorRepository.save(newInstructor);
         return instructorMapper.instructorToInstructorDTO(savedInstructor);
     }
 
     public List<InstructorDTO> getAllInstructors() {
         List<Instructor> instructorList = (List<Instructor>) instructorRepository.findAll();
         return instructorMapper.instructorListToInstructorDTOList(instructorList);
+    }
+
+    public InstructorDTO getInstructorById(Long id) {
+        Instructor instructor = instructorRepository.findById(id).orElse(null);
+        return instructorMapper.instructorToInstructorDTO(instructor);
     }
 
     public InstructorDTO updateInstructor(Long id, InstructorDTO instructorDTO) throws Exception {

@@ -5,10 +5,12 @@ import {
   deleteCourseStudent,
 } from "../api/CourseStudentApi";
 import { getDayList } from "../utils/DayList.JSX";
+import { getInstructorById } from "../api/InstructorApi";
 
 function CourseOptions(props) {
   const [courseList, setCourseList] = useState([]);
   const [studentCourseList, setStudentCourseList] = useState([]);
+  const [instructorNameById, setInstructorNameById] = useState({});
   const DAY_LIST = getDayList();
   const person = props.personId;
 
@@ -21,27 +23,51 @@ function CourseOptions(props) {
 
   async function getCoursesByInstructorId(instructorId) {
     let filteredResp;
-    console.log("inner func entered");
     try {
       const resp = await getAllCourse();
       filteredResp = resp.filter(
         (course) => course.instructorId == instructorId
       );
-    } catch (err) {
-      console.error("Error fetching courses:", err);
-    }
-    console.log("filteredResp ", filteredResp);
+    } catch (err) {}
     return filteredResp;
   }
 
   useEffect(() => {
+    async function map() {
+      let courses = [];
+      try {
+        courses = await getAllCourse();
+      } catch (e) {
+        console.log("getAllCourse error: ", e);
+        return;
+      }
+
+      const entries = await Promise.all(
+        courses.map(async (course) => {
+          let instructor = { person: { name: "Unknown" } };
+          try {
+            const result = await getInstructorById(course.instructorId);
+            if (result?.person?.name) instructor = result;
+          } catch (e) {
+            console.log("getInstructorById error: ", e);
+          }
+          return [course.id, instructor.person.name];
+        })
+      );
+
+      const nameByIdDict = Object.fromEntries(entries);
+      console.log("nameById", nameByIdDict);
+      setInstructorNameById(nameByIdDict);
+    }
+
+    map();
+  }, [props.newCourseTrigger]);
+
+  useEffect(() => {
     async function fetchCourses() {
       try {
-        console.log("Entering into get all");
         const resp = await getAll(person);
-        console.log("person " + person);
         setCourseList(resp);
-        console.log(resp);
       } catch (err) {
         console.error("Error fetching courses:", err);
       }
@@ -50,7 +76,6 @@ function CourseOptions(props) {
     if (!person || !props.courseStudentByStudentId) {
       return;
     }
-    console.log("checking person id", person);
     fetchCourses();
   }, [props.courseStudentByStudentId]);
 
@@ -72,7 +97,6 @@ function CourseOptions(props) {
     : handleDeleteCourse;
 
   async function handleDeleteCourse(courseId, idx) {
-    console.log("courseId", courseId);
     deleteCourse(courseId)
       .then((_) => props.setCourseStudentTrigger((cst) => !cst))
       .catch((e) => {
@@ -89,8 +113,6 @@ function CourseOptions(props) {
     const courseStudent = props.courseStudentByStudentId.find(
       (cs) => cs.courseId == courseId
     );
-    console.log("coursestudentbyid", props.courseStudentByStudentId);
-    console.log("courseId", courseId);
     deleteCourseStudent(courseStudent.id)
       .then((_) => props.setCourseStudentTrigger((cst) => !cst))
       .catch((e) => {
@@ -104,9 +126,7 @@ function CourseOptions(props) {
     const courseIdList = new Set(
       props.courseStudentByStudentId.map((cs) => cs.courseId)
     );
-    console.log("courseIdList ", courseIdList);
     const resp = await getAllCourse();
-    console.log("resp ", resp);
     setStudentCourseList(resp.filter((course) => courseIdList.has(course.id)));
     return resp.filter((course) => !courseIdList.has(course.id));
   }
@@ -130,6 +150,7 @@ function CourseOptions(props) {
               {getTimeWithoutSeconds(course.endTime)}
             </div>
             <div className="courseDay center">{DAY_LIST[course.dayId]}</div>
+            <div>{instructorNameById[course.id]}</div>
             <button
               className="flex center cursor-pointer"
               onClick={() =>
@@ -157,6 +178,7 @@ function CourseOptions(props) {
             {getTimeWithoutSeconds(course.endTime)}
           </div>
           <div className="courseDay center">{DAY_LIST[course.dayId]}</div>
+          <div>{instructorNameById[course.id]}</div>
           <button
             className="flex center cursor-pointer"
             onClick={() => handleDelete(course.id, idx + courseList.length)}

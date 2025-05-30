@@ -42,6 +42,7 @@ export default function CourseForm(props) {
       .then((response) => {
         console.log("Course created:", response);
         alert("New course is created");
+        props.setNewCourseTrigger((nct) => !nct);
         resetForm();
         // Do something on success, like reset form or notify user
       })
@@ -53,7 +54,6 @@ export default function CourseForm(props) {
   };
 
   useEffect(() => {
-    console.log("endHour", endHour);
     setEndHourList(HOUR_LIST.filter((hour) => hour >= startHour));
     setEndMinList(
       MINUTE_LIST.filter((min) => startHour != endHour || startMin <= min)

@@ -2,6 +2,7 @@ package com.example.attendance_management.controller;
 
 import com.example.attendance_management.model.dto.StudentDTO;
 import com.example.attendance_management.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping
-    public StudentDTO addStudent(@RequestBody StudentDTO studentDTO) {
+    public StudentDTO addStudent(@Valid @RequestBody StudentDTO studentDTO) throws Exception {
         return studentService.addStudent(studentDTO);
     }
 
@@ -24,12 +25,12 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public StudentDTO updateStudent(@PathVariable("id") Long id, @RequestBody StudentDTO studentDTO) throws Exception {
+    public StudentDTO updateStudent(@PathVariable("id") Long id, @Valid @RequestBody StudentDTO studentDTO) throws Exception {
         return studentService.updateStudent(id, studentDTO);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteStudent(@PathVariable("id") Long id) throws Exception {
+    public String deleteStudent(@Valid @PathVariable("id") Long id) throws Exception {
         return studentService.deleteStudent(id);
     }
 }

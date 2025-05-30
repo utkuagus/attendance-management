@@ -21,18 +21,13 @@ export default function Login(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent page reload
-    console.log("Username:", username);
-    console.log("Password:", password);
 
     getAll().then((resp) => {
       const user = resp.filter((student) => authUser(student.person)); // TODO: make this find
-      console.log("user: " + user);
-      console.log(user);
       if (!user.length) {
         redirectError();
         return;
       }
-      console.log("user passed");
       props.setPersonId(user[0].id);
     });
   };

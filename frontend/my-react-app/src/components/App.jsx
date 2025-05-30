@@ -14,6 +14,7 @@ function App() {
   const [isPersonTypeSelected, setIsPersonTypeSelected] = useState(false);
   const [courseStudentByStudentId, setCourseStudentByStudentId] = useState(0);
   const [openForm, setOpenForm] = useState(false);
+  const [newCourseTrigger, setNewCourseTrigger] = useState(false);
 
   useEffect(() => {
     async function get() {
@@ -28,7 +29,6 @@ function App() {
       const filteredList = courseStudentList.filter(
         (cs) => cs.studentId == personId
       );
-      console.log("filtered list ", filteredList);
       setCourseStudentByStudentId(filteredList);
     }
 
@@ -59,12 +59,19 @@ function App() {
   }
 
   if (openForm) {
-    return <CourseForm personId={personId} setOpenForm={setOpenForm} />;
+    return (
+      <CourseForm
+        personId={personId}
+        setOpenForm={setOpenForm}
+        setNewCourseTrigger={setNewCourseTrigger}
+      />
+    );
   }
 
   return (
     <div className="page-container flex center space-between">
       <CourseOptions
+        newCourseTrigger={newCourseTrigger}
         setCourseStudentTrigger={setCourseStudentTrigger}
         personId={personId}
         isStudent={isStudent}

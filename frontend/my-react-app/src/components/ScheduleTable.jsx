@@ -50,10 +50,6 @@ function ScheduleTable(props) {
   }, [props.courseStudentTrigger]);
 
   useEffect(() => {
-    console.log(schedule);
-  }, [schedule]);
-
-  useEffect(() => {
     if (!courseList) {
       return;
     }
@@ -71,27 +67,14 @@ function ScheduleTable(props) {
       return;
     }
     function applyCourseToSchedule(course, idx) {
-      console.log("Apply course: ", course);
       const day = course.dayId;
       const starthour = parseInt(course.startTime.substring(0, 2)) - 9;
       const endHour = parseInt(course.endTime.substring(0, 2)) - 9;
       const isStartInHalf = course.startTime.substring(3, 5) == "30";
       const isEndInHalf = course.endTime.substring(3, 5) == "30";
-      console.log(
-        starthour,
-        " ",
-        endHour,
-        " ",
-        isStartInHalf,
-        " ",
-        isEndInHalf,
-        course
-      );
       fillSchedule(day, starthour, endHour, isStartInHalf, isEndInHalf, idx);
       colorSchedule();
     }
-    console.log("course count " + courseData.length);
-    console.log(courseData);
     courseData.forEach(applyCourseToSchedule);
   }, [courseData]);
 
@@ -105,18 +88,6 @@ function ScheduleTable(props) {
     isEndInHalf,
     idx
   ) {
-    console.log(
-      "dim dim",
-      starthour,
-      " ",
-      endHour,
-      " ",
-      isStartInHalf,
-      " ",
-      isEndInHalf
-    );
-    console.log(schedule);
-    console.log(courseData);
     setSchedule((schedule) => [
       ...schedule.slice(0, starthour),
       ...fillRow(
@@ -131,7 +102,6 @@ function ScheduleTable(props) {
   }
 
   function fillRow(schedulePart, day, isStartInHalf, isEndInHalf, idx) {
-    console.log("schedulePart", schedulePart);
     return schedulePart.map((part, scheduleIdx) => [
       ...part.slice(0, day),
       setHourSpace(
@@ -147,24 +117,11 @@ function ScheduleTable(props) {
 
   function setHourSpace(code, isStart, isEnd, isStartInHalf, isEndInHalf) {
     if (isStart && isStartInHalf) {
-      console.log("start half entered");
       return [null, code];
     }
     if (isEnd && isEndInHalf) {
-      console.log("end half entered");
       return [code, null];
     }
-    console.log(
-      code,
-      " ",
-      isStart,
-      " ",
-      isEnd,
-      " ",
-      isStartInHalf,
-      " ",
-      isEndInHalf
-    );
     return code;
   }
 
